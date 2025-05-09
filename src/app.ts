@@ -10,7 +10,6 @@ const publicDir = path.join(__dirname,'public');
 app.use(express.static(publicDir));
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
-// Configura esto ANTES de tus rutas
 // Configuración para Render.com
 app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 
