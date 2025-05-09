@@ -1,6 +1,16 @@
 import ContactosModel from '@models/models.js';
 import {Request,Response} from 'express';
-
+// Middleware para obtener IP confiable
+function getClientIp(req:Request) {
+  // Para Render y otros ambientes con proxy
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) {
+    return typeof forwarded === 'string' 
+      ? forwarded.split(',')[0].trim() 
+      : forwarded[0].trim();
+  }
+  return req.ip;
+}
 interface Contacto {
   email: string;
   nombre: string;
@@ -27,7 +37,7 @@ class ContactsController {
   async add(req:Request,res:Response):Promise<void>{
     const {email,nombre,comentario}: Contacto = req.body;
     try {
-       const ip = req.ip || 'unknown';
+      const ip = getClientIp(req) || 'unknown';
       await ContactosModel.addContact({email,nombre,comentario,ip});
       res.status(201).json({status:true});
     } catch (error: any){
