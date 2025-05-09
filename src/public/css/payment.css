@@ -8,12 +8,10 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   box-sizing: border-box; /* Añadido para incluir padding en el ancho */
 }
-
 .payment-header {
   text-align: center;
   margin-bottom: 2rem;
 }
-
 .payment-title {
   font-size: 1.8rem;
   color: #2c3e50;
