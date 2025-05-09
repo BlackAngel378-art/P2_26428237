@@ -15,6 +15,7 @@ interface Payment {
   expYear: number | string;
   cvv: string;
   currency: string;
+  amount:string;
 }
 
 class ContactsController {
@@ -63,7 +64,7 @@ class ContactsController {
 }
 
   async paymentAdd(req: Request, res: Response): Promise<void> {
-    const { correo, nombreTitular, cardNumber, expMonth, expYear, cvv, currency }: Payment = req.body;
+    const { correo, nombreTitular, cardNumber, expMonth, expYear, cvv, currency,amount}: Payment = req.body;
 
     try {
       await ContactosModel.paymentAdd({
@@ -73,7 +74,8 @@ class ContactsController {
         expMonth: Number(expMonth),
         expYear: Number(expYear),
         cvv: String(cvv),
-        currency
+        currency,
+        amount:String(amount)
       });
       res.status(201).json({status:true});
     } catch(error: any) {
