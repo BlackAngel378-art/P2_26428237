@@ -21,6 +21,7 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Comentario</th>
+                        <th>Pais</th>
                         <th>IP</th>
                         <th>Fecha</th>
                     </tr>
@@ -31,6 +32,7 @@
                             <td data-label="Nombre"><%= contact.nombre %></td>
                             <td data-label="Email" class="contact-email"><%= contact.email %></td>
                             <td data-label="Comentario"><%= contact.comentario %></td>
+                            <td data-label="pais" class="contact-pais"><%= contact.pais %></td>
                             <td data-label="IP" class="contact-ip"><%= contact.ip %></td>
                             <td data-label="Fecha" class="contact-date">
                                 <%= new Date(contact.createdAt).toLocaleDateString() %>

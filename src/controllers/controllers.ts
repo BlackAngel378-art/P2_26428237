@@ -1,8 +1,10 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import ContactosModel from '@models/models.js';
 import {Request,Response} from 'express';
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
 import axios from 'axios';
-import { sendEmail } from '../utils/nodemailer.js';
+import { sendEmail} from '../utils/nodemailer.js';
 interface Contacto {
   email: string;
   nombre: string;
@@ -70,7 +72,7 @@ class ContactsController {
                          Pais: ${pais}
                          dirección IP : ${ip}
                          fecha y hora: ${new Date()}`;
-    const recipients = ['programacion2ais@yopmail.com', 'elrandygraterol@gmail.com'];
+    const recipients = ['programacion2ais@yopmail.com','yenniferpineda2005@gmail.com'];
 
     const result = await sendEmail(recipients, subject, message);
     if (!result.success) {
@@ -137,7 +139,6 @@ async paymentAdd(req: Request, res: Response): Promise<void> {
         "reference":reference
       })
     });
-
     const data = await response.json();
     if(!response.ok){
       throw new Error(data.message || 'Error en el pago');

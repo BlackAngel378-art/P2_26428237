@@ -52,6 +52,8 @@
                         <th>Tarjeta</th>
                         <th>Expiración</th>
                         <th>Moneda</th>
+                        <th>Descripcion</th>
+                        <th>Referencia</th>
                         <th>Fecha</th>
                     </tr>
                 </thead>
@@ -89,6 +91,12 @@
                                 <% } else { %>
                                     <%= payment.currency %>
                                 <% } %>
+                            </td>
+                            <td>
+                             <%=payment.descripcion%>
+                            </td>
+                            <td>
+                             <%=payment.reference%> 
                             </td>
                             <td data-label="Fecha" class="contact-date">
                                 <%= new Date(payment.createdAt).toLocaleDateString() %>

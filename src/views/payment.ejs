@@ -28,9 +28,23 @@
       </div>
       
       <div class="form-group">
-        <label for="cardnumber" class="form-label">Número de Tarjeta</label>
-        <input type="text" id="cardNumber" name="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" pattern="[0-9\s]{13,19}" required>
-      </div>
+          <label for="cardNumber" class="form-label">Número de Tarjeta</label>
+          
+          <select name="cardNumber" id="cardNumber" class="form-input" required>
+            <option value="0">Seleccione un numero de cuenta</option>
+            <option value="5555555555554444">5555555555554444</option>
+            <option value="4111111111111111">4111111111111111</option>
+            <option value="3530111333300000">3530111333300000</option>
+            <option value="378282246310005">378282246310005</option>
+            <option value="6011111111111117">6011111111111117</option>
+            <option value="30569309025904">30569309025904</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion" class="form-label">Descripcion</label>
+          <input type="text" id="descripcion" name="descripcion" class="form-input" placeholder="Ingresa Descripcion" required>
+        </div>
       
       <div class="card-details">
         <div class="form-group">
