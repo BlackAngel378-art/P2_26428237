@@ -12,6 +12,7 @@ interface ContactoAttributes {
   email: string;
   nombre: string;
   comentario: string;
+  pais:string;
   ip: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -21,14 +22,7 @@ interface ContactoAttributes {
 interface ContactoCreationAttributes extends Optional<ContactoAttributes, 'id'> {}
 
 // Clase del modelo Contacto con TypeScript
-class ContactoModel extends Model<ContactoAttributes, ContactoCreationAttributes> 
-  implements ContactoAttributes {
-  public id!: number;
-  public email!: string;
-  public nombre!: string;
-  public comentario!: string;
-  public ip!: string;
-  
+class ContactoModel extends Model<ContactoAttributes, ContactoCreationAttributes>{
   // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -44,22 +38,16 @@ interface PaymentAttributes {
   expYear: number;
   cvv:string;
   currency: string;
+  amount:string;
+  descripcion:string;
+  reference:string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 interface PaymentCreationAttributes extends Optional<PaymentAttributes, 'id'> {}
 
-class PaymentModel extends Model<PaymentAttributes, PaymentCreationAttributes> 
-  implements PaymentAttributes {
-  public id!: number;
-  public correo!: string;
-  public nombreTitular!: string;
-  public cardNumber!:string;
-  public expMonth!: number;
-  public expYear!: number;
-  public cvv!:string;
-  public currency!: string;
+class PaymentModel extends Model<PaymentAttributes, PaymentCreationAttributes>{
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -89,6 +77,10 @@ ContactoModel.init(
     comentario: {
       type: DataTypes.STRING(30),
       allowNull: false
+    },
+    pais:{
+      type:DataTypes.STRING,
+      allowNull:false
     },
     ip:{
       type:DataTypes.STRING,
@@ -148,6 +140,18 @@ PaymentModel.init(
     currency: {
       type: DataTypes.STRING(3),
       allowNull: false
+    },
+    amount:{
+      type:DataTypes.DECIMAL,
+      allowNull:false
+    },
+    descripcion:{
+      type:DataTypes.STRING,
+      allowNull:false
+    },
+    reference:{
+      type:DataTypes.STRING,
+      allowNull:false
     }
   },
   {
@@ -167,7 +171,7 @@ class ContactsModel {
    * Conecta y sincroniza el modelo con la base de datos
    * @returns {Promise<void>}
    */
-  private async connect(): Promise<void> {
+  private async connect():Promise<void>{
     try {
       await sequelize.sync({force:false});
       console.log('Base de datos sincronizada correctamente');
@@ -200,7 +204,7 @@ class ContactsModel {
   try {
     const data = await ContactoModel.findAll({ 
       raw: true, // Devuelve objetos planos
-      order: [['createdAt', 'DESC']] // Ordenar por fecha
+      order: [['createdAt','DESC']] // Ordenar por fecha
     });
     return data;
   } catch (error) {
