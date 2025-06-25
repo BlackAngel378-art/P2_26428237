@@ -7,24 +7,24 @@ declare module 'express-session' {
 }
 
 import ContactosModel from '@models/models.js';
-import { Request,Response} from 'express';
+import { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
 import bcrypt from 'bcrypt';
 import { sendEmail } from '../utils/nodemailer.js';
-import { UniqueConstraintError,Op,Optional} from 'sequelize';
+import { UniqueConstraintError, Op, Optional } from 'sequelize';
 
-let formType:string;
+let formType: string;
 
-interface Contacto{
-  email:string;
-  nombre:string;
-  comentario:string;
-  ip?:string;
-  pais?:string;
+interface Contacto {
+  email: string;
+  nombre: string;
+  comentario: string;
+  ip?: string;
+  pais?: string;
 }
 
-interface Payment{
+interface Payment {
   correo: string;
   nombreTitular: string;
   cardNumber: string;
@@ -38,7 +38,7 @@ interface Payment{
   estado: string;
 }
 
-interface User{
+interface User {
   id?: number;
   username: string;
   email: string;
@@ -211,52 +211,67 @@ class ContactsController {
   }
 
   async paymentAdd(req: Request, res: Response): Promise<void> {
-  const { correo, nombreTitular, cardNumber, expMonth, expYear, cvv, currency,amount,descripcion}: Payment = req.body;
-  const reference = nanoid(10);
-  try {
-    const response = await fetch('https://fakepayment.onrender.com/payments',{
-      method:'POST',
-      headers:{
-        'Authorization': `Bearer ${process.env.KEYAPIFAKE}`,
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify({
-        "amount": amount.toString(),
-        "card-number": cardNumber,
-        "cvv":cvv,
-        "expiration-month":expMonth,
-        "expiration-year":expYear,
-        "full-name":nombreTitular,
-        "currency":currency,
-        "description":descripcion,
-        "reference":reference
-      })
-    });
-    const data = await response.json();
-    if(!response.ok){
-      throw new Error(data.message || 'Error en el pago');
+    const { correo, nombreTitular, cardNumber, expMonth, expYear, cvv, currency, amount, descripcion }: Payment = req.body;
+    const reference = nanoid(10);
+
+    try {
+      const response = await fetch('https://fakepayment.onrender.com/payments', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.KEYAPIFAKE}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "amount": amount.toString(),
+          "card-number": cardNumber,
+          "cvv": cvv,
+          "expiration-month": expMonth,
+          "expiration-year": expYear,
+          "full-name": nombreTitular,
+          "currency": currency,
+          "description": descripcion,
+          "reference": reference
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        res.status(400).json({
+          status: false,
+          message: data.message || 'Error en el pago'
+        });
+        return;
+      }
+
+      await ContactosModel.paymentAdd({
+        correo,
+        nombreTitular,
+        cardNumber: String(cardNumber),
+        expMonth: Number(expMonth),
+        expYear: Number(expYear),
+        cvv: String(cvv),
+        currency,
+        amount: String(amount),
+        descripcion: String(descripcion),
+        reference,
+        estado: 'pendiente'
+      });
+
+      res.status(201).json({
+        status: true,
+        pago: true,
+        transactionId: data.data.transaction_id
+      });
+
+    } catch (error: any) {
+      console.error('Error:', error);
+      res.status(500).render('error', { 
+        message: 'Error al procesar el pago',
+        error: error.message
+      });
     }
-    await ContactosModel.paymentAdd({
-      correo,
-      nombreTitular,
-      cardNumber:String(cardNumber),
-      expMonth: Number(expMonth),
-      expYear: Number(expYear),
-      cvv: String(cvv),
-      currency,
-      amount:String(amount),
-      descripcion:String(descripcion),
-      reference
-    });
-    res.status(201).json({status:true,pago:true,transactionId:data.data.transaction_id});
-  } catch(error: any) {
-    console.error('Error:', error);
-    res.status(500).render('error', { 
-      message: 'Error al procesar el pago',
-      error: error.message
-    });
   }
-}
 
   async getPayment(req: Request, res: Response): Promise<void> {
     try {
@@ -289,10 +304,10 @@ class ContactsController {
       res.render('index', {
         sitioKey: process.env.SITIO_KEY,
         isAdmin: false,
-        title: 'FINEX',
-        description: 'pagina de programacion II facade',
-        imageUrl: 'https://p2-26428237-2.onrender.com/img/password.svg',
-        pageUrl: 'https://p2-26428237-2.onrender.com'
+        title: 'SeguriHome - Seguridad Inteligente para Hogares',
+        description: 'pagina de programacion II',
+        imageUrl: 'https://p2-31573792-1.onrender.com/img/password.svg',
+        pageUrl: 'https://p2-31573792-1.onrender.com'
       });
     } catch (error: any) {
       console.error(error.message);

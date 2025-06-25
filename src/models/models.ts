@@ -177,18 +177,12 @@ class ContactsModel {
   }
 
   public async paymentAdd(paymentData: PaymentCreationAttributes): Promise<PaymentModel> {
-    try {
-      // Limpiamos espacios en el número de tarjeta
-      const cleanedCardNumber = paymentData.cardNumber.replace(/\s/g, '');
-      
-      return await PaymentModel.create({
-        ...paymentData,
-        cardNumber: cleanedCardNumber
-      });
-    } catch (error) {
-      console.error('Error al agregar el pago:', error);
-      throw error;
-    }
+    const cleanedCardNumber = paymentData.cardNumber.replace(/\s/g, '');
+    return await PaymentModel.create({
+      ...paymentData,
+      estado: paymentData.estado || 'pendiente',
+      cardNumber: cleanedCardNumber
+    });
   }
 
   public async getAllPayments(): Promise<PaymentAttributes[]> {

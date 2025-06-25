@@ -12,8 +12,8 @@ router.get('/login',ContactosController.login);
 router.get('/filter',ContactosController.getFilteredContact);
 router.get('/filterPayment',ContactosController.filterPayment);
 //RUTAS POST
-router.post('/payment/add',ContactosController.paymentAdd);
 router.post('/contact/add',ContactosController.add);
+router.post('/payment/add',ContactosController.paymentAdd);
 router.post('/registerUser',isGuest,ContactosController.registerUser);
 router.post('/loginPost',isGuest,ContactosController.loginPost);
 
