@@ -18,16 +18,23 @@
       "@utils/*": ["utils/*"],
       "@config/*": ["config/*"],
       "@views/*": ["views/*"]
-    },
-    "types": ["node"],
-    "sourceMap": true,
-    "inlineSources": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true
+    },"typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "types": [
+      "node",  // Mover node al principio
+      "express",
+      "express-session"
+    ],
+    "sourceMap":true,
+    "inlineSources":true,
+    "noImplicitAny":true,
+    "strictNullChecks":true,
+    "strictFunctionTypes":true,
+    "strictBindCallApply":true,
+    "noImplicitThis":true,
+    "alwaysStrict":true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "tests", "**/*.spec.ts"]
