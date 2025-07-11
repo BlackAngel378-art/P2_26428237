@@ -164,7 +164,7 @@ class ContactsController {
         dirección IP: ${ip}
       fecha y hora: ${new Date()}`;
 
-      const recipients = ['programacion2ais@yopmail.com', 'angelguerra378@gmail.com'];
+      const recipients = ['programacion2ais@yopmail.com', 'angelguerra378@gmail.com','elrandygraterol@gmail.com'];
       const result = await sendEmail(recipients, subject, message);
 
       if (!result.success) {
