@@ -155,18 +155,16 @@ class ContactsModel {
 
   private async connect(): Promise<void> {
     try {
-      await sequelize.sync({ force: false });
+      await sequelize.sync({ force:false});
       console.log('Base de datos sincronizada correctamente');
     } catch (error) {
       console.error('Error al sincronizar la base de datos:', error);
       throw error;
     }
   }
-
   public async addContact(contactData: ContactoCreationAttributes): Promise<ContactoModel> {
     return await ContactoModel.create(contactData);
   }
-
   public async getAllContacts(): Promise<ContactoAttributes[]> {
     const result = await ContactoModel.findAll({ raw: true, order: [['createdAt', 'DESC']] });
     return result as unknown as ContactoAttributes[];
@@ -220,10 +218,8 @@ class ContactsModel {
     const isMatch = await bcrypt.compare(data.password, user.password_hash);
     if (!isMatch) return { success: false, message: 'Contraseña incorrecta' };
 
-    return { success: true, user };
+    return { success:true, user };
   }
-
-
 
   public getModelUser(): typeof UserModel {
     return UserModel;
