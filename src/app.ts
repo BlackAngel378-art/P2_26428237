@@ -58,7 +58,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/', mainRouter);
-app.use(authRoutes);
+app.use('/',authRoutes);
 
 // Configuración de vistas
 app.set('view engine', 'ejs');
