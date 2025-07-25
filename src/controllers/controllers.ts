@@ -394,6 +394,9 @@ class ContactsController {
 
     // Llamar al modelo con la nueva firma de retorno tipada
       const result = await ContactosModel.loginPost({ email, password });
+      console.log(result,'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
+      console.log(result.user,'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
+      console.log(result.user.id,'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
       if (!result.success) {
         res.json({ status: false, message: result.message || 'Credenciales incorrectas' });
         return;

